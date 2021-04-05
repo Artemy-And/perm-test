@@ -1,0 +1,49 @@
+
+.container {
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+}
+
+.body {
+    width: 335px;
+    height: 480px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.deleteWalking {
+    margin-top: 15px;
+    background-color: deepskyblue;
+    width: 335px;
+    height: 60px;
+    font-family: 'PT Sans Caption', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.addWalking {
+    width: 335px;
+    height: 60px;
+    background-color: #EC174F;
+    font-family: 'PT Sans Caption', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
