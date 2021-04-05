@@ -2,19 +2,16 @@ import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import style from './newWalking.module.css';
-import {addWalking} from "../features/table-reducer/table-reducer";
+import {addWalking} from "../../features/table-reducer/table-reducer";
+import {WalkingType} from "../../App";
 
 type PropsType = {
-    date: string
-    setDate: Function
-    metrs: string|number
-    setMetrs: Function
-    kilometrs: string|number
-    setKilomets: Function
+    walking:WalkingType
+    setWalking:Function
     amountMetrs:number
 }
 
-export const NewWalking: React.FC<PropsType> = ({date,setDate,metrs,setMetrs,kilometrs,setKilomets,amountMetrs}) => {
+export const NewWalkingPage: React.FC<PropsType> = ({walking,setWalking,amountMetrs}) => {
     const dispatch = useDispatch()
 
     return (
@@ -23,7 +20,7 @@ export const NewWalking: React.FC<PropsType> = ({date,setDate,metrs,setMetrs,kil
                 <form className={style.form} noValidate>
                     <TextField
                         className={style.textField}
-                        value={date}
+                        value={walking.date}
                         id="date"
                         label="Birthday"
                         type="date"
@@ -32,34 +29,42 @@ export const NewWalking: React.FC<PropsType> = ({date,setDate,metrs,setMetrs,kil
                             shrink: true,
                         }}
                         onChange={(e) => {
-                            setDate(e.currentTarget.value)
+                            setWalking((el:WalkingType)=>({
+                                ...el,
+                                date:e.target.value,
+                            }))
                         }}
                     />
                     <TextField
                         className={style.textField}
                         type='number'
-                        value={kilometrs}
+                        value={walking.kilometers}
                         id="kilometers"
                         label="kilometers"
                         onChange={(e) => {
-                            setKilomets(e.currentTarget.value)
+                            setWalking((el:WalkingType)=>({
+                                ...el,
+                                kilometers:e.target.value,
+                            }))
                         }}
                     />
                     <TextField
                         className={style.textField}
                         type='number'
-                        value={metrs}
+                        value={walking.meters}
                         id="meters"
                         label="meters"
                         onChange={(e) => {
-                            setMetrs(e.currentTarget.value)
+                            setWalking((el:WalkingType)=>({
+                                ...el,
+                                meters:e.target.value,
+                            }))
                         }}
                     />
                 </form>
             </div>
             <button className={style.addWalking} onClick={() => {
-                dispatch(addWalking(date, amountMetrs))
-
+                dispatch(addWalking(walking.date, amountMetrs))
             }}>Добавить запись
             </button>
         </div>

@@ -3,29 +3,29 @@ import {useEffect} from "react";
 import {TextField} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import style from './newWalking.module.css';
-import {DataType, updateWalking} from "../features/table-reducer/table-reducer";
-import {AppRootStateType} from "../app/store";
+import {DataType, updateWalking} from "../../features/table-reducer/table-reducer";
+import {AppRootStateType} from "../../app/store";
+import {WalkingType} from "../../App";
 
 type PropsType = {
-    date: string
-    setDate: Function
-    metrs: string|number
-    setMetrs: Function
-    kilometrs: string|number
-    setKilomets: Function
-    amountMetrs:number
-    converterDistance:(distance:any)=>void
-    onDelete:Function
+    walking: WalkingType
+    setWalking: Function
+    amountMetrs: number
+    converterDistance: (distance: any) => void
+    onDelete: (id: number) => void
 }
 
-export const EditWalkingPage: React.FC<PropsType> = ({date,setDate,metrs,setMetrs,kilometrs,setKilomets,amountMetrs,converterDistance,onDelete}) => {
+export const EditWalkingPage: React.FC<PropsType> = ({ walking,setWalking,amountMetrs,converterDistance,onDelete}) => {
     const dispatch = useDispatch()
     const editState = useSelector<AppRootStateType, DataType>((state) => state.table.editWalking);
 
-    useEffect(()=>{
-        setDate(editState.date)
-        converterDistance(editState.distance);
-    },[])
+    useEffect(() => {
+        setWalking((e: WalkingType) => ({
+            ...e,
+            date: editState.date
+        }))
+        converterDistance(editState.distance)
+    }, [])
 
 
     return (
@@ -34,7 +34,7 @@ export const EditWalkingPage: React.FC<PropsType> = ({date,setDate,metrs,setMetr
                 <form className={style.form} noValidate>
                     <TextField
                         className={style.textField}
-                        value={date}
+                        value={walking.date}
                         id="date"
                         label=""
                         type="date"
@@ -42,40 +42,48 @@ export const EditWalkingPage: React.FC<PropsType> = ({date,setDate,metrs,setMetr
                             shrink: true,
                         }}
                         onChange={(e) => {
-                            setDate(e.currentTarget.value)
+                            setWalking((el: WalkingType) => ({
+                                ...el,
+                                date: e.target.value,
+                            }))
                         }}
                     />
                     <TextField
                         className={style.textField}
                         type='number'
-                        value={kilometrs}
+                        value={walking.kilometers}
                         id="kilometers"
                         label="Kilometrs"
                         onChange={(e) => {
-                            setKilomets(e.currentTarget.value)
+                            setWalking((el: WalkingType) => ({
+                                ...el,
+                                kilometers: e.target.value,
+                            }))
                         }}
-                    />
-                    <TextField
-                        className={style.textField}
-                        type='number'
-                        value={metrs}
-                        id="meters"
-                        label="meters"
-                        onChange={(e) => {
-                            setMetrs(e.currentTarget.value)
+                            />
+                            <TextField
+                            className={style.textField}
+                            type='number'
+                            value={walking.meters}
+                            id="meters"
+                            label="meters"
+                            onChange={(e) => {
+                            setWalking((el:WalkingType)=>({
+                            ...el,
+                            meters:e.target.value,
+                        }))
                         }}
-                    />
-                </form>
-            </div>
-            <button className={style.addWalking} onClick={() => {
-                dispatch(updateWalking(editState.id,date, amountMetrs))
-            }}>Добавить запись
-            </button>
-            <button className={style.deleteWalking} onClick={() => {
-                onDelete(editState.id)
-            }}>Удалить
-            </button>
-        </div>
-
-    )
-}
+                            />
+                            </form>
+                            </div>
+                            <button className={style.addWalking} onClick={() => {
+                            dispatch(updateWalking(editState.id,walking.date, amountMetrs))
+                        }}>Добавить запись
+                            </button>
+                            <button className={style.deleteWalking} onClick={() => {
+                            onDelete(editState.id)
+                        }}>Удалить
+                            </button>
+                            </div>
+                            )
+                            }

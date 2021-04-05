@@ -6,15 +6,15 @@ import {
     getListOfWalkings, getWalking,
     sortWalkingsByDate,
     sortWalkingsByDistance
-} from "../features/table-reducer/table-reducer";
-import {AppRootStateType} from "../app/store";
-import sortBtnDisable from './../img/sortBtn--disabled.svg';
-import sortBtnActive from './../img/vector.svg';
+} from "../../features/table-reducer/table-reducer";
+import {AppRootStateType} from "../../app/store";
+import sortBtnDisable from '../../common/img/sortBtn--disabled.svg';
+import sortBtnActive from '../../common/img/vector.svg';
 
-type PropsType={
-    clearInputs:()=>void
+type PropsType = {
+    clearInputs: () => void
 }
-export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
+export const WalkingTablePage: React.FC<PropsType> = ({clearInputs}) => {
     const [disableButtonDate, setDisableButtonDate] = useState(false)
     const [disableButtonDist, setDisableButtonDist] = useState(false)
     const dispatch = useDispatch()
@@ -25,18 +25,11 @@ export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
     }, [])
 
     ////сортировка таблицы
-    const onHandleClickASCDate = useCallback(() => {
-        setDisableButtonDate(true)
-        setDisableButtonDist(false)
-        return dispatch(sortWalkingsByDate())
-
-    }, [dispatch])
-
-    const onHandleClickASCDistance = useCallback(() => {
-        setDisableButtonDate(false)
-        setDisableButtonDist(true)
-        return dispatch(sortWalkingsByDistance())
-    }, [dispatch])
+    const OnHandleSort = useCallback((boolDate: boolean, boolDist: boolean, sortAC: Function) => {
+        setDisableButtonDate(boolDate)
+        setDisableButtonDist(boolDist)
+        return dispatch(sortAC())
+    },[dispatch])
 
     var days = [
         'Воскресенье',
@@ -47,25 +40,25 @@ export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
         'Пятница',
         'Суббота'
     ];
-    function generateDayOfWeek(date:Date){
+
+    function generateDayOfWeek(date: string) {
         var d = new Date(date);
         var n = d.getDay();
         return days[n]
     }
-
-    // const headerNames = [
-    //     {id: 1, name: 'Дата'},
-    //     {id: 2, name: 'Дистанция'},
-    // ];
 
     return (
         <div className={style.scrollTable}>
             <table>
                 <thead>
                 <tr>
-                    <th onClick={onHandleClickASCDate}>Дата <span className={style.vector}> <img
-                            src={disableButtonDate ? sortBtnDisable : sortBtnActive}/></span></th>
-                    <th onClick={onHandleClickASCDistance}>Дистанция
+                    <th
+                        onClick={()=>OnHandleSort(true, false, sortWalkingsByDate)}
+                    >Дата <span className={style.vector}> <img
+                        src={disableButtonDate ? sortBtnDisable : sortBtnActive}/></span></th>
+                    <th className={style.rightHeader}
+                        onClick={()=>OnHandleSort(false,true,sortWalkingsByDistance)}
+                    >Дистанция
                         <span className={style.vector}> <img
                             src={disableButtonDist ? sortBtnDisable : sortBtnActive}/></span>
                     </th>
@@ -75,15 +68,15 @@ export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
             <div className={style.scrollTableBody}>
                 <table>
                     <tbody>
-                    {state.map((e,index) => {
-                        let pureKm = e.distance/1000
+                    {state.map((e, index) => {
+                        let pureKm = e.distance / 1000
                         let metrNumber
-                        if (Number(pureKm) === pureKm && pureKm % 1 !== 0 && Number(pureKm)){
-                            let mettter = (pureKm-parseInt(pureKm.toString())).toFixed(2).slice(2)
-                            metrNumber =  Number(mettter) * 10
+                        if (Number(pureKm) === pureKm && pureKm % 1 !== 0 && Number(pureKm)) {
+                            let mettter = (pureKm - parseInt(pureKm.toString())).toFixed(2).slice(2)
+                            metrNumber = Number(mettter) * 10
                         }
                         return (
-                            <tr key={e.id} onClick={()=>{
+                            <tr key={e.id} onClick={() => {
                                 dispatch(getWalking(e.id))
 
                             }}>
@@ -93,9 +86,9 @@ export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
                                 </td>
                                 {Number(pureKm) === pureKm && pureKm % 1 !== 0 && Number(pureKm) && metrNumber !== 0
                                     ?
-                                    <td>{~~pureKm + ' Километр ' + metrNumber + " Метров"}</td>
+                                    <td className={style.rightInfo}>{~~pureKm + ' километр ' + metrNumber + " метров"}</td>
                                     :
-                                    <td>{~~pureKm + ' Километр '}</td>
+                                    <td className={style.rightInfo}>{~~pureKm + ' километр '}</td>
                                 }
 
                             </tr>
@@ -110,4 +103,5 @@ export const WalkingTable:React.FC<PropsType> = ({clearInputs}) => {
             </button>
         </div>
 
-    )}
+    )
+}

@@ -2,6 +2,7 @@
 .container {
     display: flex;
     padding: 15px;
+    /*margin: 0 15px;*/
     flex-direction: column;
 }
 
@@ -20,7 +21,6 @@
     background-color: deepskyblue;
     width: 335px;
     height: 60px;
-    font-family: 'PT Sans Caption', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -36,7 +36,6 @@
     width: 335px;
     height: 60px;
     background-color: #EC174F;
-    font-family: 'PT Sans Caption', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
